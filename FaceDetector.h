@@ -17,30 +17,45 @@ public:
 	FaceDetector(VideoSource* vsrc){
 		videoSource_ = vsrc;
 		vsrc->attach(this);
-		showResult_ = false;
-		cascadeName_ = "haarcascade_frontalface_alt_tree.xml";
-		if( !cascade_.load( cascadeName_) ){ std::cerr << "Face Detector: Error Loading Cascade" << std::endl; }; 
+		showResults_ = false;
+		faceCascadeName_ = "haarcascade_frontalface_alt_tree.xml";
+		if( !faceCascade_.load( faceCascadeName_ ) ){ std::cerr << "Face Detector: Error Loading Cascade" << std::endl; }; 
 		detectEyes_ = false; };
 
-	FaceDetector(VideoSource* vsrc, string cascadeName){
+	FaceDetector(VideoSource* vsrc, string faceCascadeName){
 		videoSource_ = vsrc;
 		vsrc->attach(this);
-		showResult_ = false;
-		cascadeName_ = cascadeName;
-		if( !cascade_.load( cascadeName_) ){ std::cerr << "Face Detector: Error Loading Cascade" << std::endl; }; 
+		showResults_ = false;
+		faceCascadeName_ = faceCascadeName;
+		if( !faceCascade_.load( faceCascadeName_) ){ std::cerr << "Face Detector: Error Loading Cascade" << std::endl; }; 
 		detectEyes_ = false; };
+
+	FaceDetector(VideoSource* vsrc, string faceCascadeName, string eyesCascadeName){
+		videoSource_ = vsrc;
+		vsrc->attach(this);
+		showResults_ = false;
+		faceCascadeName_ = faceCascadeName;
+		eyesCascadeName_ = eyesCascadeName;
+		if( !faceCascade_.load( faceCascadeName_) ){ std::cerr << "Face Detector: Error Loading Cascade" << std::endl; }; 
+		detectEyes_ = true; 
+		if( !eyesCascade_.load( eyesCascadeName_) ){ std::cerr << "Eyes Detector: Error Loading Cascade" << std::endl; }; };
 
 
 	~FaceDetector(void);
 	void showResults();
 	void detect();
 	void enableEyesDetection(bool enable){detectEyes_ = enable;};
-	void setCascadeName(string cascadeName){cascadeName_ = cascadeName;};
-	string getCascadeName(){return cascadeName_;};
+	void setFaceCascadeName(string cascadeName){faceCascadeName_  = cascadeName;};
+	void setEyesCascadeName(string cascadeName){eyesCascadeName_  = cascadeName;};
+	string getCascadeName(){return faceCascadeName_ ;};
 
 private:
-	string cascadeName_;
-	CascadeClassifier cascade_;
+	string faceCascadeName_ ;
+	string eyesCascadeName_ ;
+	CascadeClassifier faceCascade_;
+	CascadeClassifier eyesCascade_;
+	std::vector< std::vector<Rect> > eyesRois_;
+
 	bool detectEyes_;
 };
 

@@ -10,20 +10,20 @@ class ObjectDetector :
 	public Observable, public Observer
 {
 public:
-	ObjectDetector(void){showResult_ = false;};
+	ObjectDetector(void){showResults_ = false;};
 	
 	
 	~ObjectDetector(void);
 	
 	
-	void setShowResults(bool showResult){ showResult_=showResult;};
+	void setShowResults(bool showResult){ showResults_=showResult;};
 	void setWindowName(string winName){ winName_ = winName;};
 	
-	bool isShowingResult(){return showResult_;};
+	bool isShowingResult(){return showResults_;};
 
 	virtual  void detect() = 0;
 	
-	void update(){ currFrame_ = videoSource_->getCurrentFrame(); detect(); if (showResult_) showResults();};
+	void update(){ currFrame_ = videoSource_->getCurrentFrame(); detect(); if (showResults_) showResults();};
 	void virtual showResults() = 0;
 	
 	Mat getResultsFrame(){return resFrame_;};
@@ -34,7 +34,7 @@ public:
 protected:
 	VideoSource* videoSource_; //video source
 	std::string winName_;	//name of the window in which to show the result
-	bool showResult_;
+	bool showResults_;
 	Mat currFrame_;
 	Mat resFrame_;
 	std::vector<Rect> detectionRois_;

@@ -7,10 +7,13 @@
 #include "DistanceTrackerPolicy.h"
 int main(int argc, char* argv[]){
 
-	
+	string eyesCascadeFile = "haarcascade_eye_tree_eyeglasses.xml";
+	string faceCascadeFile = "haarcascade_frontalface_alt_tree.xml";
 	VideoSource* vsrc  = new VideoSource();
 
-	FaceDetector* faceDet = new FaceDetector(vsrc);
+	FaceDetector* faceDet = new FaceDetector(vsrc, faceCascadeFile, eyesCascadeFile);
+	//FaceDetector* faceDet = new FaceDetector(vsrc);
+	//faceDet->enableEyesDetection(false);
 	//faceDet->setShowResults(1);
 	TrackerPolicy* policy = new DistanceTrackerPolicy();	
 	Tracker* tracker = new Tracker(faceDet, policy);
